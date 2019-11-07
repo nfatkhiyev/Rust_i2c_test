@@ -15,22 +15,22 @@ fn read_i2c(register: u8) -> Result<(), LinuxI2CError>{
     //let mut buf: [u8; 13] = [0; 13];
     let mut dev = LinuxI2CDevice::new("/dev/i2c-1", I2C_EXPANDER_1)?;
     let mut state_bool: bool = false;
-    let mut is_error: bool = false;
     loop{
-        let state = dev.smbus_read_byte_data(register).unwrap();
-        if (state == 0){
-            state_bool = false;
-        }
-        else if (state == 1){
-            state_bool = true;
-        }
-        else {
-            state_bool = false;
-            is_error = true;
+        match dev.smbus_read_byte_data(register){
+            Ok(state) => {
+                match state {
+                    1 => state_bool = true,
+                    0 => state_bool = false,
+                    _ => {
+                            println!("shit went down and also {}", state);
+                    }
+                }
+            } 
+            Err(shit) => {
+                eprintln!("{:?}", shit);
+                println!("shit went down");
+            }
         }
         println!("{}", state_bool);
-        if (is_error){
-            println!("{}", is_error)
-        }
     }
 }
