@@ -25,8 +25,7 @@ fn main() {
         let buttons = read_i2c(&mut i2c_device_1, pinout::INTFA).expect("the buttons should have been read");
         println!("this is fucking working");
         for x in 0..8{
-            let bool_test = (buttons << x) != 0;
-            buttons & 1;
+            let bool_test = buttons & (buttons << x) != 0;
             println!("{}",x);
         }
         //thread::sleep(time::Duration::from_secs(1));
