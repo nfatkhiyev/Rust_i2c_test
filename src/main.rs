@@ -36,7 +36,7 @@ fn main() {
                 println!("{:?}", state);
             }
 
-            if i2c_device_1.smbus_read_byte_data(pinout::GPIO_A).unwrap() != 0{
+            if i2c_device_1.smbus_read_byte_data(pinout::GPIO_A).unwrap() == 0{
                 break
             }
         }
