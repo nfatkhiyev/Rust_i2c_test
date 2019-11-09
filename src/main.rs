@@ -22,13 +22,26 @@ fn main() {
     let mut input_pin = maybe_input_pin_1.into_input_pulldown();
 
     input_pin.set_async_interrupt(Trigger::RisingEdge, move |level: Level|{
-        let buttons = read_i2c(&mut i2c_device_1, pinout::INTFA).expect("the buttons should have been read");
-        println!("this is fucking working");
-        for x in 0..8{
-            let bool_test = 1 & (buttons >> x) == 1;
-            println!("{}",bool_test);
+        let mut state: [bool; 8] = [false;8];
+        while true{
+            let buttons = read_i2c(&mut i2c_device_1, pinout::INTFA).expect("the buttons should have been read");
+            println!("this is fucking working");
+
+            for x in 0..8{
+                let bool_test = 1 & (buttons >> x) == 1;
+                if bool_test != state[x]{
+                    state[x] = bool_test;
+                }
+                //tx shit
+                println!("{:?}", state);
+            }
+
+            if i2c_device_1.smbus_read_byte_data(pinout::GPIO_A).unwrap() != 0{
+                break
+            }
         }
-    });
+    }).unwrap();
+
     loop{   
     }
 }
