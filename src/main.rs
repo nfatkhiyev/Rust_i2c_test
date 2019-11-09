@@ -19,7 +19,7 @@ fn main() {
 
     loop{
         if input_pin_state.is_high(){
-            read_i2c(&mut i2c_device_1, pinout::INTFA);
+            read_i2c(&mut i2c_device_1, pinout::GPIO_A);
         }
     }
 }
