@@ -25,20 +25,12 @@ fn main() {
         let buttons = read_i2c(&mut i2c_device_1, pinout::INTFA).expect("the buttons should have been read");
         println!("this is fucking working");
         for x in 0..8{
-            let bool_test = buttons & (buttons << x) != 0;
+            let bool_test = 1 & (buttons >> x) == 1;
             println!("{}",bool_test);
         }
-        //thread::sleep(time::Duration::from_secs(1));
     });
-
     loop{   
     }
-
-    //loop{
-    //    if input_pin_state.is_high(){
-    //        read_i2c(&mut i2c_device_1, pinout::INTFA);
-    //    }
-    //}
 }
 
 fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
