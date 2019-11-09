@@ -7,7 +7,7 @@ use i2cdev::core::*;
 use i2cdev::linux::{LinuxI2CDevice, LinuxI2CError};
 
 use std::{thread, time};
-use std::collections::BitVec;
+use bit_vec::BitVec;
 
 mod pinout;
 use pinout::*;
@@ -61,5 +61,5 @@ fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<u8, LinuxI2CError>
     thread::sleep(time::Duration::from_millis(100));
     dev.smbus_write_byte_data(pinout::OLATB, 0xff)?;
 
-    Ok(pin_to_read);
+    Ok(pin_to_read)
 }
