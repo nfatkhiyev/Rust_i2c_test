@@ -27,6 +27,7 @@ fn main() {
         for x in 0..8{
             let bool_test = (buttons << x) != 0;
             buttons & 1;
+            println!("{}",x);
         }
         //thread::sleep(time::Duration::from_secs(1));
     });
