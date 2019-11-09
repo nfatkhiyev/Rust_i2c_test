@@ -1,8 +1,12 @@
 use rppal::gpio::Gpio;
 use rppal::gpio::InputPin;
+use rppal::gpio::Trigger;
+use rppal::gpio::Level;
 
 use i2cdev::core::*;
 use i2cdev::linux::{LinuxI2CDevice, LinuxI2CError};
+
+use std::{thread, time};
 
 mod pinout;
 use pinout::*;
@@ -15,13 +19,22 @@ fn main() {
 
     initialize_i2c_device(&mut i2c_device_1).expect("An i2c should have been initialized");
 
-    let input_pin_state = maybe_input_pin_1.into_input_pulldown();
+    let mut input_pin = maybe_input_pin_1.into_input_pulldown();
 
-    loop{
-        if input_pin_state.is_high(){
-            read_i2c(&mut i2c_device_1, pinout::INTFA);
-        }
+    input_pin.set_async_interrupt(Trigger::RisingEdge, move |level: Level|{
+        read_i2c(&mut i2c_device_1, pinout::INTFA);
+        println!("this is fucking working");
+        thread::sleep(time::Duration::from_secs(1));
+    });
+
+    loop{   
     }
+
+    //loop{
+    //    if input_pin_state.is_high(){
+    //        read_i2c(&mut i2c_device_1, pinout::INTFA);
+    //    }
+    //}
 }
 
 fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
