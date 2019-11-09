@@ -40,7 +40,7 @@ fn main() {
 fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
     dev.smbus_write_byte_data(pinout::IODIRB, 0x00)?;
     dev.smbus_write_byte_data(pinout::DEFVALA, 0x00)?;
-    dev.smbus_write_byte_data(pinout::DEFVALB, 0x00)?;
+    dev.smbus_write_byte_data(pinout::DEFVALB, 0xff)?;
     dev.smbus_write_byte_data(pinout::INTCONA, 0xff)?;
     dev.smbus_write_byte_data(pinout::IOCON, 0x02)?;
     dev.smbus_write_byte_data(pinout::GPINTAEN, 0xff)?;
@@ -49,11 +49,12 @@ fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
 
 fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<(), LinuxI2CError>{
     let pin_to_read = dev.smbus_read_byte_data(register)?;
-    dev.smbus_write_byte_data(pinout::OLATB, pin_to_read)?;
+    dev.smbus_write_byte_data(pinout::OLATB, !pin_to_read)?;
     let pin_value = dev.smbus_read_byte_data(pinout::INTCAPA)?;
     println!("{}", pin_to_read);
     println!("a button has been pressed");
-    thread::sleep(time::Duration::from_secs(1));
+    //thread::sleep(time::Duration::from_secs(1));
+    dev.smbus_write_byte_data(pinout::OLATB, 0xff)?;
 
     Ok(())
 }
