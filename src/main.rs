@@ -53,7 +53,7 @@ fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<(), LinuxI2CError>
     let pin_value = dev.smbus_read_byte_data(pinout::INTCAPA)?;
     println!("{}", pin_to_read);
     println!("a button has been pressed");
-    //thread::sleep(time::Duration::from_secs(1));
+    thread::sleep(time::Duration::from_millis(100));
     dev.smbus_write_byte_data(pinout::OLATB, 0xff)?;
 
     Ok(())
