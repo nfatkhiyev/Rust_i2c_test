@@ -9,4 +9,3 @@ edition = "2018"
 [dependencies]
 i2cdev = "0.4.2"
 rppal = "0.11.3"
-bit-vec = "0.6.1"
