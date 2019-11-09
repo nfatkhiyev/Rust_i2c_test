@@ -29,12 +29,12 @@ fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
     dev.smbus_write_byte_data(pinout::DEFVALA, 0x00)?;
     dev.smbus_write_byte_data(pinout::DEFVALB, 0x00)?;
     dev.smbus_write_byte_data(pinout::INTCONA, 0xff)?;
+    dev.smbus_write_byte_data(pinout::IOCON, 0x02)?;
     dev.smbus_write_byte_data(pinout::GPINTAEN, 0xff)?;
     Ok(())
 }
 
 fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<(), LinuxI2CError>{
-    //let mut buf: [u8; 13] = [0; 13];
     let pin_to_read = dev.smbus_read_byte_data(register)?;
     let pin_value = dev.smbus_read_byte_data(pinout::INTCAPA)?;
     println!("{}", pin_to_read);

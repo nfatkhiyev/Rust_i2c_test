@@ -11,6 +11,8 @@ pub const INTFA: u8 = 0x0e;
 pub const INTCAPA: u8 = 0x10;
 pub const INTCONA: u8 = 0x08;
 
+pub const IOCON: u8 = 0x0a;
+
 pub const GPIO_A: u8 = 0x12;
 pub const GPIO_B: u8 = 0x13;
 
