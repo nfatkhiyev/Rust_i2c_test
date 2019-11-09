@@ -7,7 +7,6 @@ use i2cdev::core::*;
 use i2cdev::linux::{LinuxI2CDevice, LinuxI2CError};
 
 use std::{thread, time};
-use bit_vec::BitVec;
 
 mod pinout;
 use pinout::*;
@@ -25,9 +24,9 @@ fn main() {
     input_pin.set_async_interrupt(Trigger::RisingEdge, move |level: Level|{
         let buttons = read_i2c(&mut i2c_device_1, pinout::INTFA).expect("the buttons should have been read");
         println!("this is fucking working");
-        let bv = BitVec::from_elem(8, true);
-        for x in &bv {
-            println!("{}", x);
+        for x in 0..8{
+            let bool_test = (buttons << x) != 0;
+            buttons & 1;
         }
         //thread::sleep(time::Duration::from_secs(1));
     });
