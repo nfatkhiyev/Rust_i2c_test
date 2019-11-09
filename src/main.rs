@@ -19,7 +19,7 @@ fn main() {
 
     loop{
         if input_pin_state.is_high(){
-            read_i2c(&mut i2c_device_1, pinout::GPIO_A);
+            read_i2c(&mut i2c_device_1, pinout::INTFA);
         }
     }
 }
@@ -36,6 +36,7 @@ fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
 fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<(), LinuxI2CError>{
     //let mut buf: [u8; 13] = [0; 13];
     let pin_to_read = dev.smbus_read_byte_data(register)?;
+    let pin_value = dev.smbus_read_byte_data(pinout::INTCAPA)?;
     println!("{}", pin_to_read);
     println!("a button has been pressed");
 
