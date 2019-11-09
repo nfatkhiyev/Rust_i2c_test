@@ -7,6 +7,7 @@ use i2cdev::core::*;
 use i2cdev::linux::{LinuxI2CDevice, LinuxI2CError};
 
 use std::{thread, time};
+use std::collections::BitVec;
 
 mod pinout;
 use pinout::*;
@@ -22,8 +23,12 @@ fn main() {
     let mut input_pin = maybe_input_pin_1.into_input_pulldown();
 
     input_pin.set_async_interrupt(Trigger::RisingEdge, move |level: Level|{
-        read_i2c(&mut i2c_device_1, pinout::INTFA);
+        let buttons = read_i2c(&mut i2c_device_1, pinout::INTFA).expect("the buttons should have been read");
         println!("this is fucking working");
+        let bv = BitVec::from_elem(8, true);
+        for x in &bv {
+            println!("{}", x);
+        }
         //thread::sleep(time::Duration::from_secs(1));
     });
 
@@ -47,7 +52,7 @@ fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
     Ok(())
 }
 
-fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<(), LinuxI2CError>{
+fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<u8, LinuxI2CError>{
     let pin_to_read = dev.smbus_read_byte_data(register)?;
     dev.smbus_write_byte_data(pinout::OLATB, !pin_to_read)?;
     let pin_value = dev.smbus_read_byte_data(pinout::INTCAPA)?;
@@ -56,5 +61,5 @@ fn read_i2c(dev: &mut LinuxI2CDevice, register: u8) -> Result<(), LinuxI2CError>
     thread::sleep(time::Duration::from_millis(100));
     dev.smbus_write_byte_data(pinout::OLATB, 0xff)?;
 
-    Ok(())
+    Ok(pin_to_read);
 }
