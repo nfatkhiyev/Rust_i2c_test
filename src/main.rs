@@ -38,7 +38,7 @@ fn main() {
 }
 
 fn initialize_i2c_device(dev: &mut LinuxI2CDevice) -> Result<(), LinuxI2CError>{
-    dev.smbus_write_byte_data(pinout::IODIRA, 0xff)?;
+    dev.smbus_write_byte_data(pinout::IODIRB, 0x00)?;
     dev.smbus_write_byte_data(pinout::DEFVALA, 0x00)?;
     dev.smbus_write_byte_data(pinout::DEFVALB, 0x00)?;
     dev.smbus_write_byte_data(pinout::INTCONA, 0xff)?;

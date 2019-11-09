@@ -17,5 +17,6 @@ pub const GPIO_A: u8 = 0x12;
 pub const OLATB: u8 = 0x15;
 
 pub const IODIRA: u8 = 0x00;
+pub const IODIRB: u8 = 0x01;
 
 pub const RPI_GPIO_INT_PIN: u8 = 22;
